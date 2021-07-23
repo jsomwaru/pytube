@@ -51,6 +51,7 @@ class YouTube:
         # additional formats, but that doesn't appear to still be the case.
 
         # the url to vid info, parsed from watch html
+        # this is incorrect now
         self._vid_info_url: Optional[str] = None
         self._vid_info_raw: Optional[str] = None  # content fetched by vid_info_url
         self._vid_info: Optional[Dict] = None  # parsed content of vid_info_raw
@@ -106,6 +107,7 @@ class YouTube:
     def vid_info_raw(self):
         if self._vid_info_raw:
             return self._vid_info_raw
+        
         self._vid_info_raw = request.get(self.vid_info_url)
         return self._vid_info_raw
 
@@ -126,8 +128,8 @@ class YouTube:
                 self.video_id, self.watch_url
             )
         else:
-            self._vid_info_url = extract.video_info_url(
-                video_id=self.video_id, watch_url=self.watch_url
+            self._vid_info_url = extract.video_info_url_youtubei(
+                self.watch_html
             )
         return self._vid_info_url
 

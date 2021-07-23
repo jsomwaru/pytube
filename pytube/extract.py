@@ -215,6 +215,19 @@ def channel_name(url: str) -> str:
         caller="channel_name", pattern="patterns"
     )
 
+def video_info_url_youtubei(watch_html: str):
+    """ gets the video info url for the recent update to innnetube as of 07/22/21
+    :param str watch_html
+        the html of the watch url
+    """
+    ytcfg = get_ytcfg(watch_html)
+    try:
+        api_key = ytcfg['INNERTUBE_API_KEY']
+    except KeyError:
+        raise Exception('Unable to get innertube api key')
+
+    return f"https://youtubei.googleapis.com/youtubei/v1/player?key={api_key}"
+
 
 def video_info_url(video_id: str, watch_url: str) -> str:
     """Construct the video_info url.
