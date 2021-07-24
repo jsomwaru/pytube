@@ -13,6 +13,7 @@ from pytube.exceptions import HTMLParseError, LiveStreamError, RegexMatchError
 from pytube.helpers import regex_search
 from pytube.metadata import YouTubeMetadata
 from pytube.parser import parse_for_object, parse_for_all_objects
+from pytube.innertube import _default_clients
 
 
 logger = logging.getLogger(__name__)
@@ -215,14 +216,13 @@ def channel_name(url: str) -> str:
         caller="channel_name", pattern="patterns"
     )
 
-def video_info_url_youtubei(watch_html: str):
+def video_info_url_innertube():
     """ gets the video info url for the recent update to innnetube as of 07/22/21
-    :param str watch_html
-        the html of the watch url
+        :reutrns:
+            the html of the watch url
     """
-    ytcfg = get_ytcfg(watch_html)
     try:
-        api_key = ytcfg['INNERTUBE_API_KEY']
+        api_key = _default_clients['WEB']['api_key']
     except KeyError:
         raise Exception('Unable to get innertube api key')
 

@@ -107,8 +107,10 @@ class YouTube:
     def vid_info_raw(self):
         if self._vid_info_raw:
             return self._vid_info_raw
-        
-        self._vid_info_raw = request.get(self.vid_info_url)
+        from pytube.innertube import InnerTube
+        inner = InnerTube()
+        self._vid_info_raw = {}
+        self._vid_info_raw['player_response'] = inner.player(self.video_id)
         return self._vid_info_raw
 
     @property
@@ -128,9 +130,7 @@ class YouTube:
                 self.video_id, self.watch_url
             )
         else:
-            self._vid_info_url = extract.video_info_url_youtubei(
-                self.watch_html
-            )
+            self._vid_info_url = extract.video_info_url_innertube()
         return self._vid_info_url
 
     @property
@@ -290,7 +290,7 @@ class YouTube:
 
         :rtype: Dict[Any, Any]
         """
-        return dict(parse_qsl(self.vid_info_raw))
+        return self.vid_info_raw
 
     @property
     def caption_tracks(self) -> List[pytube.Caption]:
